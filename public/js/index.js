@@ -1,4 +1,6 @@
 /* global $, visoConfig, uuid,Mustache, jsPlumb,  */
+requestURL = 'http://localhost:3000/lineage';
+jsonData = null;
 (function () {
     var area = 'bg'
     var areaId = '#' + area
@@ -6,6 +8,7 @@
         begin: 'begin-node',
         end: 'end-node'
     }
+    var firstInstance = jsPlumb.getInstance();
     jsPlumb.ready(main)
     jsPlumb.importDefaults({
         ConnectionsDetachable: false
@@ -32,7 +35,7 @@
         config.maxConnections = -1
         jsPlumb.addEndpoint(id, {
             anchors: [position || 'Right',],
-            uuid:id+'-OriginTable'
+            uuid: id + '-OriginTable'
         }, config)
     };
 
@@ -45,25 +48,32 @@
         config.maxConnections = -1
         jsPlumb.addEndpoint(id, {
             anchors: position || 'Left',
-            uuid:id+'-RSTable'
+            uuid: id + '-RSTable'
         }, config)
     };
 
 ///////////////////////////////////////////////////
     function main() {
         jsPlumb.setContainer('bg')
-        //把所有节点绘制
-        DataDraw.draw(json.nodes)
+        //请求接口血缘json
+        $.get(requestURL, function (res, status) {
+            if (status === "success") {
+                jsonData = res;
+                DataDraw.draw(jsonData)
+            }
+        }, 'json');
+        // 或使用本地数据
+        // DataDraw.draw(json)
     }
 
 ///////////////////////////////////////////////
     var DataDraw = {
         // 核心方法
-        draw: function (nodes) {
+        draw: function (json) {
             var $container = $(areaId)
             var that = this
             //遍历渲染所有节点
-            nodes.forEach(function (item, key) {
+            json.nodes.forEach(function (item, key) {
                 var data = {
                     id: item.id,
                     name: item.id,
@@ -89,31 +99,31 @@
                     ul.append(li);
                 });
                 //根据节点类型找到不同模板各自的 添加端点 方法
-                if (that['addEndpointOf' + item.type] ) {
+                if (that['addEndpointOf' + item.type]) {
                     that['addEndpointOf' + item.type](item)
                 }
             });
-            //最后根连线
-            this.finalConnect(json.nodes,json.relations)
+            //最后连线
+            this.finalConnect(json.nodes, json.relations)
         },
         //根据节点类型找到对应的渲染方法
-        finalConnect: function (nodes,relations) {
-            var that=this;
+        finalConnect: function (nodes, relations) {
+            var that = this;
             nodes.forEach(function (node) {
                 //RS表要排除，
-                if(node.id!='RS'&&node.type!='RS'){
+                if (node.id != 'RS' && node.type != 'RS') {
                     //遍历每个表的每个列
-                    node.columns.forEach(col=>{
-                        relations.forEach(relation=>{
-                            var relName=relation.source.parentName+'.'+relation.source.column;
-                            var nodeName=node.name+'.'+col.name;
+                    node.columns.forEach(col => {
+                        relations.forEach(relation => {
+                            var relName = relation.source.parentName + '.' + relation.source.column;
+                            var nodeName = node.name + '.' + col.name;
                             //如果关系中的起始关系等于当前表节点的列，就构建连接
-                            if(relName===nodeName){
+                            if (relName === nodeName) {
                                 //这里sourceUUID、targetUUID应该和addEndpoint里设置的uuid一致
-                                var sourceUUID=nodeName+"-OriginTable";
-                                var targetUUID=relation.target.parentName+'.'+relation.target.column+'-RSTable';
+                                var sourceUUID = nodeName + "-OriginTable";
+                                var targetUUID = relation.target.parentName + '.' + relation.target.column + '-RSTable';
                                 that.connectEndpoint(sourceUUID, targetUUID);
-                           }
+                            }
                         });
                     });
                 }

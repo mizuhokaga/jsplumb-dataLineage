@@ -7,13 +7,23 @@
     <title>jsplumb-dataLineage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="./public/css/index.css">
 </head>
 
 <body>
 <div id="app">
-    <div class="min-height" id="bg" style="background-color: #dff0d8;">
+    <div id="toolkit_group">
+        <button type="button" class="btn btn-success  " onclick="reset()">reset zoom</button>
+        <button type="button" class="btn btn-success  " onclick="zoomin()">+</button>
+        <button type="button" class="btn btn-success  " onclick="zoomout()">-</button>
+        <button type="button" class="btn btn-success  " onclick="download_png()">download as png</button>
+        <button type="button" class="btn btn-success  " onclick="download_json()">download as json</button>
     </div>
+    <div class="hr" style="margin: 20px 20px"></div>
+    <div class="min-height" id="bg" style="background-color: #dff0d8;"></div>
+    <!--    <div id="jsonOutput"></div>-->
+
 </div>
 
 <script id="tpl-Origin" type="text/html">
@@ -30,13 +40,19 @@
 <script id="tpl-RS" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
         <div class="panel  panel-node panel-node-rs">
-            <div id='{{id}}-heading' data-id="{{id}}" class="table-header"  style="background-color: #d26b58;color: white"> {{name}}</div>
+            <div id='{{id}}-heading' data-id="{{id}}" class="table-header"
+                 style="background-color: #d26b58;color: white"> {{name}}
+            </div>
             <ul id='{{id}}-cols' class="col-group">
-
             </ul>
         </div>
     </div>
 </script>
+
+<!--导出图片功能所需要的-->
+<script src="./public/js/html2canvas.js"></script>
+<!--svg转换为canvas-->
+<script src="https://cdn.bootcdn.net/ajax/libs/canvg/1.5/canvg.min.js"></script>
 <!-- uuid在编码连接端点是必须的-->
 <script src="https://cdn.bootcss.com/node-uuid/1.4.8/uuid.min.js"></script>
 <script src="https://cdn.bootcss.com/mustache.js/2.3.0/mustache.min.js"></script>
@@ -44,10 +60,168 @@
 <!--删除jquery-ui.min.js将导致节点无法拖动-->
 <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.bootcss.com/jsPlumb/1.7.6/jquery.jsPlumb.min.js"></script>
-<script src="public/js/json.js"></script>
+<!--示例数据-->
+<!--<script src="public/js/json.js"></script>-->
 <script src="./public/js/config.js"></script>
 <script src="./public/js/index.js"></script>
+<script>
 
+
+    //将血缘关系保存为json格式
+    function download_json() {
+        //下载血缘图为json
+        //TODO:如果是根据血缘关系图获得json，需要手动构建json。待完善
+        // var connects = [];
+        // $.each(jsPlumb.getAllConnections(), function (idx, connection) {
+        //     connects.push({
+        //         ConnectionId: connection.id,
+        //         PageSourceId: connection.sourceId,
+        //         PageTargetId: connection.targetId,
+        //         SourceText: connection.source.innerText,
+        //         TargetText: connection.target.innerText,
+        //     });
+        // });
+        // var blocks = [];
+        // $("#bg .pa").each(function (idx, elem) {
+        //     var $elem = $(elem);
+        //     console.log(($elem))
+        //     blocks.push({
+        //         BlockId: $elem.attr('id'),
+        //         BlockContent: $elem.html(),
+        //         BlockX: parseInt($elem.css("left"), 10),
+        //         BlockY: parseInt($elem.css("top"), 10)
+        //     });
+        // });
+        // var serialize = JSON.stringify(connects);
+        // console.log(serialize);
+        // var blockList=JSON.stringify(blocks);
+        // console.log(blockList);
+
+        //如果血缘信息json是直接从后端请求过来的,直接下载接口数据
+        var datastr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData));
+        var a = document.createElement('a');
+        a.setAttribute("href", datastr);
+        a.setAttribute("download", new Date().getTime() + this.getUUID() + '.json');
+        a.click();
+        a.remove();
+    }
+
+    //将血缘关系图保存为图片 svg处理参考 https://www.cnblogs.com/NAG2020/p/12961584.html
+    function download_png() {
+        if (typeof html2canvas !== 'undefined') {
+            var nodesToRecover = [];
+            var nodesToRemove = [];
+            var svgElem = $("#bg").find('svg');//注意修改选取的dom元素
+            //将边（svg）转化了canvas的形式
+            svgElem.each(function (index, node) {
+                var parentNode = node.parentNode;
+                var svg = node.outerHTML.trim();
+                //canvas 容器
+                var canvas = document.createElement('canvas');
+                canvg(canvas, svg);
+                if (node.style.position) {
+                    canvas.style.position += node.style.position;
+                    canvas.style.left += node.style.left;
+                    canvas.style.top += node.style.top;
+                }
+
+                nodesToRecover.push({
+                    parent: parentNode,
+                    child: node
+                });
+                parentNode.removeChild(node);
+
+                nodesToRemove.push({
+                    parent: parentNode,
+                    child: canvas
+                });
+
+                parentNode.appendChild(canvas);
+            })
+        }
+        //scala属性解决生成的canvas模糊问题
+        html2canvas($("#bg"), {taintTest: false, scale: 2}).then(canvas => {
+            var a = document.createElement('a');
+            //转换图片格式方法来自 https://blog.csdn.net/yzding1225/article/details/119215395
+            var blob = this.dataURLToBlob(canvas.toDataURL('image/png'));
+            //这块是保存图片操作  可以设置保存的图片的信息
+            a.setAttribute('href', URL.createObjectURL(blob));
+            //图片名称是当前 时间戳+uuid
+            a.setAttribute('download', new Date().getTime() + this.getUUID() + '.png');
+            a.click();
+            URL.revokeObjectURL(blob);
+            a.remove();
+            //由于生成图片将svg转换了canvas导致边的hover事件失效，需要重新填入数据 or 刷新页面
+            location.reload()
+        });
+
+    };
+
+    //图片格式转换方法
+    function dataURLToBlob(dataurl) {
+        let arr = dataurl.split(',');
+        let mime = arr[0].match(/:(.*?);/)[1];
+        let bstr = atob(arr[1]);
+        let n = bstr.length;
+        let u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type: mime});
+    };
+
+    //原始尺寸
+    var baseZoom = 1;
+
+    //重置缩放
+    function reset() {
+        if (this.baseZoom !== 1) {
+            this.baseZoom = 1;
+            const zoom = this.baseZoom;
+            this.zoom(zoom);
+            jsPlumb.setZoom(baseZoom);
+        }
+    }
+
+    //缩放是整个画布及其内容一起缩放
+    //参考 https://blog.csdn.net/KentKun/article/details/105230475
+    function zoom(scale) {
+        $("#bg").css({
+            "-webkit-transform": `scale(${scale})`,
+            "-moz-transform": `scale(${scale})`,
+            "-ms-transform": `scale(${scale})`,
+            "-o-transform": `scale(${scale})`,
+            "transform": `scale(${scale})`,
+            "transform-origin": "0% 0%"
+        })
+    };
+
+    //放大
+    function zoomin() {
+        this.baseZoom += 0.1;
+        const zoom = this.baseZoom;
+        this.zoom(zoom);
+        jsPlumb.setZoom(zoom);
+    };
+
+    //缩小
+    function zoomout() {
+        this.baseZoom -= 0.1;
+        const zoom = this.baseZoom;
+        this.zoom(zoom);
+        jsPlumb.setZoom(zoom);
+    }
+
+    //获取uuid
+    function getUUID() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+    }
+</script>
 </body>
+
 
 </html>
