@@ -1,5 +1,5 @@
 # 基于jsPlumb的、模仿sqlFlow前端的数据血缘前端展示页面
-
+使用的 jsPlumb.js 版本是Community Edition社区版 1.7.6
 ## 需求：
 后端给定sql的数据血缘json信息，**前端需要实现类似sqlFlow的表和列的连线展示数据血缘关系**。
 ![](./imgs/sqlflow.png)
@@ -18,7 +18,6 @@
 
 由于本人写前端时间不多并且有些代码写法是根据业务来写的，一些奇怪的写法不要在意！
 
-使用的 jsPlumb.js 版本是 1.7.6
 
 其中：
 - config.js :放置jsPlumb.js全局配置信息
