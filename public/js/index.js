@@ -1,5 +1,5 @@
 /* global $, visoConfig, uuid,Mustache, jsPlumb,  */
-requestURL = 'http://localhost:3000/lineage';
+requestURL = 'http://localhost:3000/columnsLineage';
 jsonData = null;
 (function () {
     var area = 'bg'
@@ -54,8 +54,9 @@ jsonData = null;
 
 ///////////////////////////////////////////////////
     function main() {
-        jsPlumb.setContainer('bg')
-        //请求接口血缘json
+        jsPlumb.setContainer('bg');
+
+        // 请求接口血缘json
         $.get(requestURL, function (res, status) {
             if (status === "success") {
                 jsonData = res;

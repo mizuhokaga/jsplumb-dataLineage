@@ -4,8 +4,8 @@ var visoConfig = {
 
 // 基本连接线样式
 visoConfig.connectorPaintStyle = {
-    lineWidth: 3,
-    strokeStyle: 'lightgray',
+    lineWidth: 2,
+    strokeStyle: '#c4c4c4',
     // joinstyle: 'round',
     // fill: 'pink',
     outlineColor: '',
@@ -14,8 +14,8 @@ visoConfig.connectorPaintStyle = {
 
 // 鼠标悬浮在连接线上的样式
 visoConfig.connectorHoverStyle = {
-    lineWidth: 3,
-    strokeStyle: 'red',
+    lineWidth: 2,
+    strokeStyle: 'black',
     outlineWidth: 10,
     outlineColor: ''
 }

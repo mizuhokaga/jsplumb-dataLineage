@@ -1,5 +1,9 @@
 .min-height{
-  height: 300px;
+  width: 800px;
+  height: 800px;
+  background-color: #dff0d8;
+  margin-left: 110px;
+  position: relative;
 }
 .pa{
   position: absolute;
@@ -12,36 +16,46 @@
 .col-group{
   padding-left: 0;
   margin-bottom: 0;
+  line-height: 1.2;
 }
 .col-group-item{
-  background-color: #fff;
+  /*background-color: #fff;*/
+
   border: 1px solid #ddd;
   position: relative;
   display: block;
 }
 .table-header{
-  padding: 2px 25px;
+  text-align: center;
+  padding: 1px 2px;
   background-color: #91c051;
   color: white;
+  font-size: 12px;
 }
 
-#end-node{
-  left: 150px;
-  top: 700px;
-}
+
 .panel-node{
-  width: 150px;
+  width: 120px;
   display: inline-block;
   /*margin: auto 1px;*/
-  word-wrap:break-word
+  /*行内文本太长后面的就省略*/
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .panel-node-origin{
   border: 1px solid #91c051;
+  background-color: #91c051;
 }
 .panel-node-rs{
   border: 1px solid #d26b58;
 }
 .panel-node-list{
-  padding: 2px 10px;
+  background-color: #fff;
+  padding-left:  5px;
   font-size: smaller;
+  /*行内文本太长后面的就省略*/
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

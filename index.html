@@ -15,13 +15,17 @@
 <div id="app">
     <div id="toolkit_group">
         <button type="button" class="btn btn-success  " onclick="reset()">reset zoom</button>
-        <button type="button" class="btn btn-success  " onclick="zoomin()">+</button>
-        <button type="button" class="btn btn-success  " onclick="zoomout()">-</button>
+        <button type="button" class="btn btn-success  " onclick="zoomin()"> +</button>
+        <button type="button" class="btn btn-success  " onclick="zoomout()"> -</button>
         <button type="button" class="btn btn-success  " onclick="download_png()">download as png</button>
         <button type="button" class="btn btn-success  " onclick="download_json()">download as json</button>
+        <text class="btn btn-success  ">帮助：右键移动画布</text>
+
     </div>
     <div class="hr" style="margin: 20px 20px"></div>
-    <div class="min-height" id="bg" style="background-color: #dff0d8;"></div>
+    <!--  禁止原生的鼠标右键，后面考虑将导入导出各种功能放到自定义的鼠标右键 -->
+    <div class="min-height" id="bg" oncontextmenu="return false" onmousedown="mousedown(event)"
+         onmousemove="move(event)" onmouseup="mouseup(event)"></div>
     <!--    <div id="jsonOutput"></div>-->
 
 </div>
@@ -60,12 +64,65 @@
 <!--删除jquery-ui.min.js将导致节点无法拖动-->
 <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.bootcss.com/jsPlumb/1.7.6/jquery.jsPlumb.min.js"></script>
-<!--示例数据-->
-<!--<script src="public/js/json.js"></script>-->
+<!--本地示例数据-->
+<script src="public/js/json.js"></script>
 <script src="./public/js/config.js"></script>
 <script src="./public/js/index.js"></script>
 <script>
+    flag = false;
+    X = 0;
+    Y = 0;
+    bgX = $("#bg").width();
+    bgY = $("#bg").height();
 
+    //拖动功能不够完善又缺陷。参考 https://blog.csdn.net/join_null/article/details/80266993
+    //松开鼠标右键
+    function mouseup(event) {
+        if (event.button == 2) {
+            $("#bg").css("cursor", "Auto")
+            this.flag = false;
+        }
+        // console.log(this.X+"|"+this.Y)
+    }
+
+    //按下鼠标右键
+    function mousedown(event) {
+        if (event.button == 2) {
+            this.flag = true;
+            $("#bg").css("cursor", "Grabbing");
+            var bx = event.offsetX;
+            var by = event.offsetY;
+            this.X = bx;
+            this.Y = by;
+            console.log(this.X + "|" + this.Y)
+        }
+    }
+
+    //血缘关系图会在框架内移动
+    function move(event) {
+        if (flag && baseZoom===1) {
+            //获取相对父元素的坐标
+            var ax = event.offsetX;
+            var ay = event.offsetY;
+
+            var tmp_x = (ax - this.X), tmp_y = (ay - this.Y);
+            console.log(tmp_x + "t|" + tmp_y)
+            if (this.flag) {
+                $("#bg .pa").each(function (index, node) {
+                    var a = tmp_x + $(node).position().left;
+                    var b = tmp_y + $(node).position().top;
+                    if (a >= bgX || a <= 0) a = bgX - $(node).width();
+                    else if (b >= bgY || b <= 0) b = bgY - $(node).height();
+                    else {
+                        $(node).css('left', $(node).position().left+tmp_x/25);
+                        $(node).css('top', $(node).position().top+tmp_y/25);
+                    }
+                    console.log($(node).position().left)
+                });
+                jsPlumb.repaintEverything();
+            }
+        }
+    };
 
     //将血缘关系保存为json格式
     function download_json() {
@@ -104,7 +161,7 @@
         a.setAttribute("download", new Date().getTime() + this.getUUID() + '.json');
         a.click();
         a.remove();
-    }
+    };
 
     //将血缘关系图保存为图片 svg处理参考 https://www.cnblogs.com/NAG2020/p/12961584.html
     function download_png() {
@@ -124,7 +181,6 @@
                     canvas.style.left += node.style.left;
                     canvas.style.top += node.style.top;
                 }
-
                 nodesToRecover.push({
                     parent: parentNode,
                     child: node
@@ -135,7 +191,6 @@
                     parent: parentNode,
                     child: canvas
                 });
-
                 parentNode.appendChild(canvas);
             })
         }
@@ -152,6 +207,7 @@
             URL.revokeObjectURL(blob);
             a.remove();
             //由于生成图片将svg转换了canvas导致边的hover事件失效，需要重新填入数据 or 刷新页面
+            //TODO:目前直接刷新整个页面
             location.reload()
         });
 
