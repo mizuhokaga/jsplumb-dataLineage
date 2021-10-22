@@ -63,8 +63,9 @@ jsonData = null;
                 DataDraw.draw(jsonData)
             }
         }, 'json');
+
         // 或使用本地数据
-        // DataDraw.draw(json)
+        // DataDraw.draw(json);
     }
 
 ///////////////////////////////////////////////
