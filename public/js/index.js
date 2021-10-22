@@ -90,8 +90,8 @@ jsonData = null;
                 //将该表的所有列
                 item.columns.forEach(col => {
                     var ul = $('#' + item.id + '-cols');
-                    //这里li标签的id应该和 addEndpointOfXXX方法里的保持一致
-                    var li = $("<li id='id-col'  class='col-group-item panel-node-list'>col</li>");
+                    //这里li标签的id应该和 addEndpointOfXXX方法里的保持一致 col-group-item
+                    var li = $("<li id='id-col' class=' panel-node-list' onmousemove='highlight()'>col</li>");
                     // console.log(li[0])
                     //修改每个列名所在li标签的id使其独一无二
                     li[0].id = item.name + '.' + col.name
@@ -124,6 +124,20 @@ jsonData = null;
                                 var sourceUUID = nodeName + "-OriginTable";
                                 var targetUUID = relation.target.parentName + '.' + relation.target.column + '-RSTable';
                                 that.connectEndpoint(sourceUUID, targetUUID);
+                                //鼠标移动到连接线上后，两边的列高亮
+                                jsPlumb.bind("mouseover", function (conn, originalEvent) {
+                                    var src_name = conn.sourceId.split(".");
+                                    var tar_name = conn.targetId.split(".");
+                                    //注意 . 的转义，参考 https://blog.csdn.net/qq_44831907/article/details/120899676
+                                    $("#"+src_name[0]+"-cols").find("#"+src_name[0]+"\\."+src_name[1]).css("background-color", "#faebd7");
+                                    $("#"+tar_name[0]+"-cols").find("#"+tar_name[0]+"\\."+tar_name[1]).css("background-color", "#faebd7");
+                                });
+                                jsPlumb.bind("mouseout", function (conn, originalEvent) {
+                                    var src_name = conn.sourceId.split(".");
+                                    var tar_name = conn.targetId.split(".");
+                                    $("#"+src_name[0]+"-cols").find("#"+src_name[0]+"\\."+src_name[1]).css("background-color", "#fff");
+                                    $("#"+tar_name[0]+"-cols").find("#"+tar_name[0]+"\\."+tar_name[1]).css("background-color", "#fff");
+                                });
                             }
                         });
                     });

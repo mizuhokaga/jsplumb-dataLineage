@@ -8,34 +8,19 @@
 .pa{
   position: absolute;
 }
-.fixed-node{
-  position: absolute;
-  top: 80px;
-  left: 150px;
-}
+
 .col-group{
   padding-left: 0;
   margin-bottom: 0;
   line-height: 1.2;
 }
 .col-group-item{
-  /*background-color: #fff;*/
-
   border: 1px solid #ddd;
   position: relative;
   display: block;
 }
-.table-header{
-  text-align: center;
-  padding: 1px 2px;
-  background-color: #91c051;
-  color: white;
-  font-size: 12px;
-}
-
-
 .panel-node{
-  width: 120px;
+  width: auto;
   display: inline-block;
   /*margin: auto 1px;*/
   /*行内文本太长后面的就省略*/
@@ -49,13 +34,26 @@
 }
 .panel-node-rs{
   border: 1px solid #d26b58;
+  background-color:#d26b58;
 }
+.table-header{
+  text-align: center;
+  padding: 1px 15px;
+  background-color: #91c051;
+  color: white;
+  font-size: 12px;
+}
+
+
 .panel-node-list{
   background-color: #fff;
-  padding-left:  5px;
+  padding:  1px 10px ;
   font-size: smaller;
   /*行内文本太长后面的就省略*/
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.panel-node-list:hover{
+  background-color:#faebd7
 }

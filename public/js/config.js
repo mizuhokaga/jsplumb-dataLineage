@@ -14,7 +14,7 @@ visoConfig.connectorPaintStyle = {
 
 // 鼠标悬浮在连接线上的样式
 visoConfig.connectorHoverStyle = {
-    lineWidth: 2,
+    lineWidth: 3,
     strokeStyle: 'black',
     outlineWidth: 10,
     outlineColor: ''
@@ -40,7 +40,7 @@ visoConfig.baseStyle = {
     connectorOverlays: [
         ['Arrow', {
             width: 10,
-            length: 15,
+            length: 13,
             location: 1
         }],
     ]

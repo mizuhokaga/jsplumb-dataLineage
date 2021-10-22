@@ -19,7 +19,7 @@
         <button type="button" class="btn btn-success  " onclick="zoomout()"> -</button>
         <button type="button" class="btn btn-success  " onclick="download_png()">download as png</button>
         <button type="button" class="btn btn-success  " onclick="download_json()">download as json</button>
-        <text class="btn btn-success  ">帮助：右键移动画布</text>
+        <text class="btn btn-success  ">帮助：右键移动画布；鼠标移动到连线上有列名高亮</text>
 
     </div>
     <div class="hr" style="margin: 20px 20px"></div>
@@ -32,7 +32,7 @@
 
 <script id="tpl-Origin" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
-        <div class="panel panel-node panel-node-origin">
+        <div class="panel panel-node panel-node-origin" id='{{id}}-inner'>
             <div id='{{id}}-heading' data-id="{{id}}" class="table-header">{{name}}</div>
 
             <ul id='{{id}}-cols' class="col-group">
@@ -43,7 +43,7 @@
 
 <script id="tpl-RS" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
-        <div class="panel  panel-node panel-node-rs">
+        <div class="panel  panel-node panel-node-rs" d='{{id}}-inner'>
             <div id='{{id}}-heading' data-id="{{id}}" class="table-header"
                  style="background-color: #d26b58;color: white"> {{name}}
             </div>
@@ -65,15 +65,19 @@
 <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.bootcss.com/jsPlumb/1.7.6/jquery.jsPlumb.min.js"></script>
 <!--本地示例数据-->
-<script src="public/js/json.js"></script>
+<!--<script src="public/js/json.js"></script>-->
 <script src="./public/js/config.js"></script>
 <script src="./public/js/index.js"></script>
 <script>
     flag = false;
+    //传递坐标的全局变量
     X = 0;
     Y = 0;
     bgX = $("#bg").width();
     bgY = $("#bg").height();
+    //鼠标移动到表的列上
+    function highlight(){
+    }
 
     //拖动功能不够完善又缺陷。参考 https://blog.csdn.net/join_null/article/details/80266993
     //松开鼠标右键
@@ -87,6 +91,7 @@
 
     //按下鼠标右键
     function mousedown(event) {
+
         if (event.button == 2) {
             this.flag = true;
             $("#bg").css("cursor", "Grabbing");
@@ -94,19 +99,18 @@
             var by = event.offsetY;
             this.X = bx;
             this.Y = by;
-            console.log(this.X + "|" + this.Y)
+            // console.log(this.X + "|" + this.Y)
         }
     }
 
-    //血缘关系图会在框架内移动
+    //按住右键拖动，血缘关系图会在框架内移动
     function move(event) {
         if (flag && baseZoom===1) {
             //获取相对父元素的坐标
             var ax = event.offsetX;
             var ay = event.offsetY;
-
             var tmp_x = (ax - this.X), tmp_y = (ay - this.Y);
-            console.log(tmp_x + "t|" + tmp_y)
+            // console.log(tmp_x + "t|" + tmp_y)
             if (this.flag) {
                 $("#bg .pa").each(function (index, node) {
                     var a = tmp_x + $(node).position().left;
@@ -117,7 +121,6 @@
                         $(node).css('left', $(node).position().left+tmp_x/25);
                         $(node).css('top', $(node).position().top+tmp_y/25);
                     }
-                    console.log($(node).position().left)
                 });
                 jsPlumb.repaintEverything();
             }
