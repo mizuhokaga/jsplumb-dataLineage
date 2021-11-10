@@ -32,6 +32,10 @@
   border: 1px solid #91c051;
   background-color: #91c051;
 }
+.panel-node-middle{
+  border: 1px solid #b24b78;
+  background-color: #b24b78;
+}
 .panel-node-rs{
   border: 1px solid #d26b58;
   background-color:#d26b58;

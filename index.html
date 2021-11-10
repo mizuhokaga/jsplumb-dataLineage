@@ -29,7 +29,8 @@
     <!--    <div id="jsonOutput"></div>-->
 
 </div>
-
+<!--不同类型表的渲染模板-->
+<!--起源表模板-->
 <script id="tpl-Origin" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
         <div class="panel panel-node panel-node-origin" id='{{id}}-inner'>
@@ -40,7 +41,18 @@
         </div>
     </div>
 </script>
+<!--生成的中间临时表-->
+<script id="tpl-Middle" type="text/html">
+    <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
+        <div class="panel panel-node panel-node-middle" id='{{id}}-inner'>
+            <div id='{{id}}-heading' data-id="{{id}}" class="table-header" style="background-color: #b24b78;color: white">{{name}}</div>
 
+            <ul id='{{id}}-cols' class="col-group">
+            </ul>
+        </div>
+    </div>
+</script>
+<!--结果表模板-->
 <script id="tpl-RS" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
         <div class="panel  panel-node panel-node-rs" d='{{id}}-inner'>
@@ -75,15 +87,12 @@
     Y = 0;
     bgX = $("#bg").width();
     bgY = $("#bg").height();
-    //鼠标移动到表的列上
-    function highlight(){
-    }
 
     //拖动功能不够完善又缺陷。参考 https://blog.csdn.net/join_null/article/details/80266993
     //松开鼠标右键
     function mouseup(event) {
         if (event.button == 2) {
-            $("#bg").css("cursor", "Auto")
+            $("#bg").css("cursor", "Auto");
             this.flag = false;
         }
         // console.log(this.X+"|"+this.Y)

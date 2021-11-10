@@ -22,15 +22,15 @@
         jsPlumb.setContainer('bg');
 
         // 请求接口血缘json
-        // $.get(requestURL, function (res, status) {
-        //     if (status === "success") {
-        //         jsonData = res;
-        //         DataDraw.draw(jsonData)
-        //     }
-        // }, 'json');
+        $.get(requestURL, function (res, status) {
+            if (status === "success") {
+                jsonData = res;
+                DataDraw.draw(jsonData)
+            }
+        }, 'json');
     
         // 或使用本地数据
-        DataDraw.draw(json);
+        // DataDraw.draw(json);
     }
 ```
 2. 在浏览器中打开index.html即可。
@@ -38,7 +38,11 @@
 
 ***
 ## 碎碎念
-参考 https://github.com/wangduanduan/visual-ivr 这个项目改写的！本项目只实现了根据json渲染图表的功能，其他功能如删除表和连线由于业务不需要**没有编写或保留**。
+参考 
+- https://github.com/wangduanduan/visual-ivr 
+- http://jsfiddle.net/rayflex/La9p4/
+
+这些项目写的！本项目只实现了根据json渲染图表的功能，其他功能如删除表和连线由于业务不需要**没有编写或保留**。
 
 由于本人写前端时间不多并且有些代码写法是根据业务来写的，一些奇怪的写法不要在意！欢迎提issues！
 
@@ -47,3 +51,4 @@
 - json.js :放置案例json数据
 - index.js :完成渲染绘制的核心js
 
+非常感谢 [katherineOne](https://github.com/katherineOne) 和 [yesky12](https://github.com/yesky12) 的宝贵建议和帮助！

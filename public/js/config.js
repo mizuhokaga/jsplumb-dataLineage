@@ -6,6 +6,7 @@ var visoConfig = {
 visoConfig.connectorPaintStyle = {
     lineWidth: 2,
     strokeStyle: '#c4c4c4',
+    // strokeStyle: 'darkgray',
     // joinstyle: 'round',
     // fill: 'pink',
     outlineColor: '',
@@ -23,6 +24,8 @@ visoConfig.connectorHoverStyle = {
 visoConfig.baseStyle = {
     endpoint: ['Dot', {
         radius: 2,
+        outlineStroke:'red',
+        outlineWidth:2
     }], // 端点的形状
     connectorStyle: visoConfig.connectorPaintStyle, // 连接线的颜色，大小样式
     connectorHoverStyle: visoConfig.connectorHoverStyle,
