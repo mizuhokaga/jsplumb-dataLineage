@@ -1,63 +1,76 @@
-.min-height{
-  width: 800px;
-  height: 800px;
-  background-color: #dff0d8;
-  margin-left: 110px;
-  position: relative;
-}
-.pa{
-  position: absolute;
+.min-height {
+    width: 1500px;
+    height: 1800px;
+    background-color: #dff0d8;
+    margin-left: 110px;
+    position: relative;
 }
 
-.col-group{
-  padding-left: 0;
-  margin-bottom: 0;
-  line-height: 1.2;
+.pa {
+    position: absolute;
 }
-.col-group-item{
-  border: 1px solid #ddd;
-  position: relative;
-  display: block;
+
+.col-group {
+    padding-left: 0;
+    margin-bottom: 0;
+    line-height: 1.2;
 }
-.panel-node{
-  width: auto;
-  display: inline-block;
-  /*margin: auto 1px;*/
-  /*行内文本太长后面的就省略*/
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+
+.col-group-item {
+    border: 1px solid #ddd;
+    position: relative;
+    display: block;
 }
-.panel-node-origin{
-  border: 1px solid #91c051;
-  background-color: #91c051;
+
+.panel-node {
+    width: auto;
+    display: inline-block;
+    /*margin: auto 1px;*/
+    /*行内文本太长后面的就省略*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
-.panel-node-middle{
-  border: 1px solid #b24b78;
-  background-color: #b24b78;
+
+.panel-node-origin {
+    border: 1px solid #91c051;
+    background-color: #91c051;
 }
-.panel-node-rs{
-  border: 1px solid #d26b58;
-  background-color:#d26b58;
+
+.panel-node-middle {
+    border: 1px solid #DFC6A8;
+    background-color: #DFC6A8;
 }
-.table-header{
-  text-align: center;
-  padding: 1px 15px;
-  background-color: #91c051;
-  color: white;
-  font-size: 12px;
+
+.panel-node-union {
+    border: 1px solid #66ccff;
+    background-color: #66ccff;
+}
+
+.panel-node-rs {
+    border: 1px solid #ff9900;
+    background-color: #ff9900;
+}
+
+.table-header {
+    text-align: center;
+    padding: 1px 15px;
+    background-color: #91c051;
+    color: white;
+    font-size: 12px;
 }
 
 
-.panel-node-list{
-  background-color: #fff;
-  padding:  1px 10px ;
-  font-size: smaller;
-  /*行内文本太长后面的就省略*/
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+.panel-node-list {
+    background-color: #fff;
+    padding: 1px 10px;
+    font-size: smaller;
+    /*行内文本太长后面的就省略*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
-.panel-node-list:hover{
-  background-color:#faebd7
+
+.panel-node-list:hover {
+    background-color: #faebd7
 }

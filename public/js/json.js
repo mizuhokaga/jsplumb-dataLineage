@@ -1,5 +1,4 @@
-//有个bug：如果node的name是 dbName.tableName 的形式会报错。
-// bug问题在于“.”这个点,建议用“-”符号替换。bug原因未知
+// 注意，对于node的id不能是 id.table1 这种带 "."的形式，否则会引起报错。
 var json = {
     'relations':[
         {

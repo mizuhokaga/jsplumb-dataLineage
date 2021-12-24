@@ -45,7 +45,18 @@
 <script id="tpl-Middle" type="text/html">
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
         <div class="panel panel-node panel-node-middle" id='{{id}}-inner'>
-            <div id='{{id}}-heading' data-id="{{id}}" class="table-header" style="background-color: #b24b78;color: white">{{name}}</div>
+            <div id='{{id}}-heading' data-id="{{id}}" class="table-header" style="background-color: #DFC6A8;color: white">{{name}}</div>
+
+            <ul id='{{id}}-cols' class="col-group">
+            </ul>
+        </div>
+    </div>
+</script>
+<!--生成的Union表-->
+<script id="tpl-UNION" type="text/html">
+    <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
+        <div class="panel panel-node panel-node-union" id='{{id}}-inner'>
+            <div id='{{id}}-heading' data-id="{{id}}" class="table-header" style="background-color: #66ccff;color: white">{{name}}</div>
 
             <ul id='{{id}}-cols' class="col-group">
             </ul>
@@ -57,7 +68,7 @@
     <div class="pa" id='{{id}}' style='top:{{top}}px;left:{{left}}px'>
         <div class="panel  panel-node panel-node-rs" d='{{id}}-inner'>
             <div id='{{id}}-heading' data-id="{{id}}" class="table-header"
-                 style="background-color: #d26b58;color: white"> {{name}}
+                 style="background-color: #ff9900;color: white"> {{name}}
             </div>
             <ul id='{{id}}-cols' class="col-group">
             </ul>

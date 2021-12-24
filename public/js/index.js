@@ -23,7 +23,7 @@ jsonData = null;
     function addDraggable(id) {
         jsPlumb.draggable(id, {
             containment: '#bg'
-        })
+        });
     };
 
     // 设置起源表每一列的锚点为了后面连线
@@ -64,7 +64,8 @@ jsonData = null;
         jsPlumb.addEndpoint(id, {
             anchors: position || 'Left',
             uuid: id + '-Left'
-        }, config)
+        }, config);
+
     };
 
 ///////////////////////////////////////////////////
@@ -72,15 +73,15 @@ jsonData = null;
         jsPlumb.setContainer('bg');
 
         // 请求接口血缘json
-        // $.get(requestURL, function (res, status) {
-        //     if (status === "success") {
-        //         jsonData = res;
-        //         DataDraw.draw(jsonData)
-        //     }
-        // }, 'json');
+        $.get(requestURL, function (res, status) {
+            if (status === "success") {
+                jsonData = res;
+                DataDraw.draw(jsonData)
+            }
+        }, 'json');
 
         // 或使用本地数据
-        DataDraw.draw(json);
+        // DataDraw.draw(json);
     }
 
 ///////////////////////////////////////////////
@@ -93,7 +94,7 @@ jsonData = null;
             json.nodes.forEach(function (item, key) {
                 var data = {
                     id: item.id,
-                    name: item.id,
+                    name: item.name,
                     top: item.top,
                     left: item.left,
                 };
@@ -113,6 +114,10 @@ jsonData = null;
                     li[0].id = item.name + '.' + col.name
                     //填充列名
                     li[0].innerText = col.name;
+
+                    li.onmouseover=function (){
+                        li.css("background-color", "#faebd7");
+                    }
                     ul.append(li);
                 });
                 //根据节点类型找到不同模板各自的 添加端点 方法
@@ -130,7 +135,7 @@ jsonData = null;
             nodes.forEach(function (node) {
                 //RS表要排除，
                 if (node.id != 'RS' && node.type != 'RS') {
-                    //遍历的每个表的每个列（除了RS表，血缘关系是给有向无环图啦）
+                    //遍历的每个表的每个列（除了RS表，血缘关系是个有向无环图啦）
                     node.columns.forEach(col => {
                         relations.forEach(relation => {
                             var relName = relation.source.parentName + '.' + relation.source.column;
@@ -226,6 +231,14 @@ jsonData = null;
             })
         },
 
+        addEndpointOfUNION: function (node) {
+            addDraggable(node.id)
+            node.columns = Array.from(node.columns);
+            node.columns.forEach(function (col) {
+                setMiddlePoint(node.id + '.' + col.name, 'UNION')
+            })
+        },
+
         addEndpointOfRS: function (node) {
             addDraggable(node.id)
             node.columns = Array.from(node.columns);
@@ -240,7 +253,8 @@ jsonData = null;
             jsPlumb.connect(
                 {
                     uuids: [from, to],
-                    connector: ['Bezier']
+                    //StateMachine Bezier Flowchart Straight
+                    connector: ['StateMachine']
                 });
         },
 
