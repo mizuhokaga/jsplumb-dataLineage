@@ -73,15 +73,15 @@ jsonData = null;
         jsPlumb.setContainer('bg');
 
         // 请求接口血缘json
-        $.get(requestURL, function (res, status) {
-            if (status === "success") {
-                jsonData = res;
-                DataDraw.draw(jsonData)
-            }
-        }, 'json');
+        // $.get(requestURL, function (res, status) {
+        //     if (status === "success") {
+        //         jsonData = res;
+        //         DataDraw.draw(jsonData)
+        //     }
+        // }, 'json');
 
         // 或使用本地数据
-        // DataDraw.draw(json);
+        DataDraw.draw(json);
     }
 
 ///////////////////////////////////////////////

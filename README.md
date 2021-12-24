@@ -16,21 +16,21 @@
 - 小地图导航
 ****
 ## 如何使用：
-1. 对`index.js`的`main()`修改,注释请求接口的代码改用本地数据
+1. 对`index.js`的`main()`修改,注释请求接口的代码改用本地json数据
 ```javascript
  function main() {
         jsPlumb.setContainer('bg');
 
-        // 请求接口血缘json
-        $.get(requestURL, function (res, status) {
-            if (status === "success") {
-                jsonData = res;
-                DataDraw.draw(jsonData)
-            }
-        }, 'json');
+        // 使用后端接口血缘json
+        // $.get(requestURL, function (res, status) {
+        //     if (status === "success") {
+        //         jsonData = res;
+        //         DataDraw.draw(jsonData)
+        //     }
+        // }, 'json');
     
         // 或使用本地数据
-        // DataDraw.draw(json);
+        DataDraw.draw(json);
     }
 ```
 2. 在浏览器中打开index.html即可
