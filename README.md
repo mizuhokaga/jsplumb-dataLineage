@@ -36,11 +36,8 @@
 2. 在浏览器中打开index.html即可
 3. 详细代码解析和一些**坑坑坑**还可以参考我的这篇文章👉 https://blog.csdn.net/qq_44831907/article/details/120937608
 ## BUG：
-1. json数据中的node的id不能是 id.table1 这种带 "."的形式（准确地说纯数字、带其他特殊符号），否则会引起报错！！name则无限制！！！考虑到id仅是为了标示node的唯一性所以就没处理了，问题应该是出自jquery的id选择器。
-- name带 点 的 情况
- ![](./imgs/dot.png)
-- id带 点 的 情况
-![](./imgs/dot_error.png)
+1. json数据中的node的id和name两个字段不能是 id.table1 这种带 "."的形式（准确地说纯数字、带其他特殊符号），否则会引起报错！
+
 ***
 ## 碎碎念
 参考 
