@@ -2,7 +2,7 @@
 使用的 jsPlumb.js 版本是Community Edition社区版 1.7.6
 
 2022-02-14 15:15:35
-基于Vue2版本的已开源，地址：https://github.com/mizuhokaga/jsplumb-dataLineage-vue
+基于Vue2版本的已开源，地址：https://github.com/mizuhokaga-dataLineage/jsplumb-dataLineage-vue
 ## 需求：
 后端给定sql的数据血缘json信息，**前端需要实现类似sqlFlow的表和列的连线展示数据血缘关系**。下图是sqlflow的示例图
 ![](./imgs/sqlflow.png)
